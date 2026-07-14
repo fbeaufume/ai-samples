@@ -5,7 +5,7 @@ This folder contains a sample application for my
 
 It is implemented in Java with Spring Boot and Spring AI, and takes the form of a command line application.
 
-By default, it requires Ollama with the Llama 3.1 model, so first install Ollama then run `ollama pull llama3.1:8b`
+By default, it requires Ollama with the Gemma 4 model, so first install Ollama then run `ollama pull gemma4:12b`
 to install the model.
 
 If you want to use another Ollama model, update `application.properties`. I added some examples.

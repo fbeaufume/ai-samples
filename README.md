@@ -2,6 +2,9 @@
 
 This repository contains Spring AI sample applications.
 
+The project was started with Spring Boot 3 and Spring AI 1 then migrated to Spring Boot 4 and Spring AI 2.
+The main branch targets Spring Boot 4. To use the Spring Boot 3 variant, use the dedicated branch.
+
 ## spring-ai-basics
 
 `spring-ai-basics` folder contains a sample application for my
