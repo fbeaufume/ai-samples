@@ -1,6 +1,6 @@
-# Spring AI Samples
+# AI Samples
 
-This repository contains Spring AI sample applications.
+This repository contains AI sample applications.
 
 The project was started with Spring Boot 3 and Spring AI 1 then migrated to Spring Boot 4 and Spring AI 2.
 The main branch targets Spring Boot 4. To use the Spring Boot 3 variant, use the dedicated branch.
@@ -18,7 +18,7 @@ You should first start with this sample application.
 ## spring-ai-chatbot
 
 `spring-ai-chatbot` folder contains a sample application for my
-[Chatbot with spring AI](https://beaufume.fr/articles/spring-ai-chatbot/) article.
+[Chatbot with Spring AI](https://beaufume.fr/articles/spring-ai-chatbot/) article.
 
 It contains a basic chatbot sample application. It also shows how to use function calling.
 See article and dedicated `README.md` for additional information.
