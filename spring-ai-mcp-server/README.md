@@ -7,7 +7,8 @@ It is implemented in Java with Spring Boot and Spring AI, and takes the form of 
 
 This application does not use any LLM. The LLM is on the MCP client side.
 
-Start the application with `mvnw spring-boot:run` or from your IDE.
+Start the application with `mvnw spring-boot:run` or from your IDE, then use the `http://localhost:8080/mcp` URL
+in your local MCP client.
 
 Notable source files:
 
