@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guess the Number</title>
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --text: #1f2330;
+            --muted: #6b7280;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --border: #d9dce5;
+            --high: #dc2626;
+            --low: #2563eb;
+            --win: #16a34a;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1d1e22;
+                --card: #2a2b31;
+                --text: #f3f4f6;
+                --muted: #a1a1aa;
+                --border: #3f4048;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            font-family: "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 26px;
+        }
+
+        .description {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 12px 14px;
+            font-size: 18px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--accent-hover);
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 24px;
+            min-height: 64px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 2px dashed var(--border);
+            color: var(--muted);
+            transition: all 0.25s;
+        }
+
+        .result.high {
+            border: 2px solid var(--high);
+            color: var(--high);
+            background: rgba(220, 38, 38, 0.08);
+        }
+
+        .result.low {
+            border: 2px solid var(--low);
+            color: var(--low);
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .result.win {
+            border: 2px solid var(--win);
+            color: var(--win);
+            background: rgba(22, 163, 74, 0.10);
+        }
+
+        .result.error {
+            border: 2px solid var(--high);
+            color: var(--high);
+            font-size: 15px;
+        }
+
+        .pop {
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.95);
+            }
+            60% {
+                transform: scale(1.04);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .attempts {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🎯 Guess the Number</h1>
+    <p class="description">I'm thinking of a number between 1 and 1000.<br>
+        Can you find it?</p>
+
+    <form id="guess-form">
+        <input id="guess-input" type="number" min="1" max="1000" placeholder="Your guess…" required autofocus>
+        <button id="guess-btn" type="submit">Check</button>
+    </form>
+
+    <div id="result" class="result">Make your first guess!</div>
+    <div id="attempts" class="attempts"></div>
+</div>
+
+<script type="module">
+    import {App} from "https://unpkg.com/@modelcontextprotocol/ext-apps@2.0.3/app-with-deps";
+
+    const form = document.getElementById("guess-form");
+    const input = document.getElementById("guess-input");
+    const button = document.getElementById("guess-btn");
+    const resultEl = document.getElementById("result");
+    const attemptsEl = document.getElementById("attempts");
+
+    let attempts = 0;
+
+    const app = new App({name: "guess-the-number", version: "1.0.0"});
+
+    // Here we could define the app.ontoolinput callback to retrieve the input parameters of the tool that launched this app
+
+    // And/or define the app.ontoolresult callback to retrieve the return value of the tool that launched this app
+
+    await app.connect();
+
+    const showResult = (text, cssClass, icon = "") => {
+        resultEl.className = `result ${cssClass}`;
+        resultEl.textContent = icon ? `${icon} ${text}` : text;
+        void resultEl.offsetWidth; // restart animation
+        resultEl.classList.add("pop");
+    };
+
+    const RESULTS = {
+        TOO_HIGH: {cssClass: "high", icon: "⬇️", label: () => "Too high"},
+        TOO_LOW: {cssClass: "low", icon: "⬆️", label: () => "Too low"},
+        WON: {cssClass: "win", icon: "🎉", label: (n) => `You won! The number was ${n}. A new number has been chosen.`},
+        INVALID: {cssClass: "error", icon: "⚠️", label: () => "Please enter a whole number between 1 and 1000."}
+    };
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const number = Number(input.value);
+        if (!Number.isInteger(number) || number < 1 || number > 1000) {
+            showResult(RESULTS.INVALID.label(), "error", "⚠️");
+            return;
+        }
+
+        button.disabled = true;
+        try {
+            const result = await app.callServerTool({
+                name: "check-guess",
+                arguments: {number}
+            });
+
+            if (result.isError) {
+                showResult(`Error: ${result.content?.[0]?.text ?? "unknown error"}`, "error", "⚠️");
+                return;
+            }
+
+            const guessResult = JSON.parse(result.content?.[0]?.text ?? "null");
+            const display = RESULTS[guessResult];
+            if (!display) {
+                showResult(`Unexpected result: ${guessResult}`, "error", "⚠️");
+                return;
+            }
+            if (guessResult === "INVALID") {
+                showResult(display.label(number), display.cssClass, display.icon);
+                return;
+            }
+
+            attempts++;
+            attemptsEl.textContent = `Attempts: ${attempts}`;
+            showResult(display.label(number), display.cssClass, display.icon);
+
+            if (guessResult === "WON") {
+                try {
+                    await app.updateModelContext({
+                        content: [{type: "text", text: `The user guessed number ${number} in ${attempts} attempts.`}]
+                    });
+                } catch (e) {
+                    // Not all MCP clients support "ui/update-model-context" message
+                    console.log("Failed to update the model context", e);
+                }
+                attempts = 0;
+            }
+        } finally {
+            button.disabled = false;
+            input.select();
+        }
+    });
+</script>
+</body>
+</html>
