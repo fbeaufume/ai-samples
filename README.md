@@ -27,8 +27,9 @@ See article and dedicated `README.md` for additional information.
 
 ## spring-ai-mcp-server
 
-`spring-ai-mcp-server` folder contains a sample MCP server application for my
-[MCP with Spring AI](https://beaufume.fr/articles/spring-ai-mcp/) article.
+`spring-ai-mcp-server` folder contains a sample MCP server application with a tool and an MCP App for my
+[MCP with Spring AI](https://beaufume.fr/articles/spring-ai-mcp/) and
+[MCP Apps with Spring AI](https://beaufume.fr/articles/spring-ai-mcp-apps/) articles.
 
 See dedicated `README.md` for additional information.
 

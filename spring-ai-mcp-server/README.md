@@ -1,7 +1,8 @@
 # Spring AI MCP Server
 
-This folder contains a basic MCP server sample application for my
-[MCP with Spring AI](https://beaufume.fr/articles/spring-ai-mcp/) article.
+This folder contains a basic MCP server sample application with an MCP tool and an MCP App for my
+[MCP with Spring AI](https://beaufume.fr/articles/spring-ai-mcp/) and
+[MCP Apps with Spring AI](https://beaufume.fr/articles/spring-ai-mcp-apps/) articles.
 
 It is implemented in Java with Spring Boot and Spring AI, and takes the form of a web application.
 
